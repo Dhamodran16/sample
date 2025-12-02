@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<bookstore>
+  <book>
+    <title>The Hobbit</title>
+    <author>J.R.R. Tolkien</author>
+  </book>
+  <book>
+    <title>1984</title>
+    <author>George Orwell</author>
+  </book>
+</bookstore>
