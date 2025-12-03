@@ -1,11 +1,222 @@
-<?xml version="1.0"?>
-<bookstore>
-  <book>
-    <title>The Hobbit</title>
-    <author>J.R.R. Tolkien</author>
-  </book>
-  <book>
-    <title>1984</title>
-    <author>George Orwell</author>
-  </book>
-</bookstore>
+<?xml version="1.0" encoding="UTF-8"?>
+<book id="book-001" title="Introduction to Field Service" language="en">
+<metadata>
+<author>Jane Doe</author>
+<publisher>Acme Training</publisher>
+<date>2025-12-02</date>
+<isbn>978-1-23456-789-0</isbn>
+</metadata>
+
+<!-- Chapter 1 -->
+<chapter id="ch-01" title="Getting Started">
+<intro>
+<para>Overview of the system and basic concepts.</para>
+</intro>
+
+<section id="ch-01-sec-01" title="Overview">
+<subject id="ch-01-sec-01-subj-01" name="System Description">
+<pageblock id="pb-0101" type="text">
+<heading>What the system does</heading>
+<para>The system performs diagnostics and reports status.</para>
+</pageblock>
+
+<pageblock id="pb-0102" type="task">
+<heading>Initial Power-up Check</heading>
+<task id="task-010201" name="PowerOnCheck" level="basic">
+<description>Steps to safely power up the unit for first use.</description>
+
+<step number="1">
+Ensure power cable is connected.
+Make sure the cable is firmly seated on both ends.
+Check the plug for any visible damage before using it.
+Confirm the socket is rated for the unit's power requirements.
+Avoid using loose or extended cables to prevent power drops.
+Ensure the environment around the port is dry and clean.
+</step>
+
+<step number="2">
+Switch on main power.
+Verify that the outlet is supplying stable electricity.
+Confirm that the power button clicks smoothly without resistance.
+Observe any initial LED activity when the unit receives power.
+Listen for faint startup sounds indicating internal initialization.
+Avoid touching internal parts while power is switching on.
+</step>
+
+<step number="3">
+Wait for self-test to complete (blinking green).
+Watch the LED pattern to ensure it follows the normal cycle.
+Avoid interrupting the process by toggling the power switch.
+Keep the device steady to prevent vibration-related issues.
+Listen for short beeps that may indicate progress.
+Allow extra time if the unit is starting for the first time.
+</step>
+
+<expectedResult>Unit completes POST and shows ready status.</expectedResult>
+
+<safetyWarnings>
+<warning>Do not open the unit while connected to mains.</warning>
+</safetyWarnings>
+
+</task>
+</pageblock>
+
+</subject>
+</section>
+
+<section id="ch-01-sec-02" title="Installation">
+<subject id="ch-01-sec-02-subj-01" name="Physical Installation">
+<pageblock id="pb-0201" type="text">
+<heading>Mounting the unit</heading>
+<para>Mount on a flat surface with four M4 screws.</para>
+</pageblock>
+
+<pageblock id="pb-0202" type="task">
+<heading>Mounting Procedure</heading>
+<task id="task-020201" name="MountUnit" level="intermediate">
+<description>How to mount the unit safely and securely.</description>
+
+<step number="1">
+Mark hole positions on surface.
+Use a ruler or template to align hole points accurately.
+Ensure the marks form a straight and balanced layout.
+Double-check spacing to match the unit’s mounting bracket.
+Avoid marking on uneven or unstable surfaces.
+Use a pencil or marker that is clearly visible on the material.
+</step>
+
+<step number="2">
+Drill pilot holes.
+Choose a drill bit that matches the recommended size.
+Hold the drill steady to avoid widening the hole.
+Wear safety glasses to protect your eyes from debris.
+Clear dust from the holes after drilling.
+Ensure the holes are straight for proper screw alignment.
+</step>
+
+<step number="3">
+Install screws and tighten to 3 Nm.
+Use a torque driver to avoid over-tightening.
+Insert each screw gently before applying full torque.
+Ensure screws sit flush against the surface.
+Check that the unit is firmly secured without wobbling.
+Recheck torque settings to ensure uniform tightening.
+</step>
+
+<tools>
+<tool>Electric drill</tool>
+<tool>Torque driver</tool>
+</tools>
+
+<estimatedTime unit="minutes">15</estimatedTime>
+
+</task>
+</pageblock>
+
+</subject>
+</section>
+</chapter>
+
+<!-- Chapter 2 -->
+<chapter id="ch-02" title="Operation">
+<section id="ch-02-sec-01" title="Basic Operation">
+<subject id="ch-02-sec-01-subj-01" name="User Interface">
+<pageblock id="pb-0301" type="text">
+<heading>Front panel overview</heading>
+<para>Buttons, LEDs, and ports described.</para>
+</pageblock>
+
+<pageblock id="pb-0302" type="task">
+<heading>Performing a Self-test</heading>
+<task id="task-030201" name="RunSelfTest" level="basic">
+<description>Run the built-in self-test routine.</description>
+
+<step number="1">
+From the main menu, select Diagnostics &gt; Self-test.
+Ensure the screen is responsive before navigating.
+Check that the menu icons are displayed correctly.
+Use the arrow keys if the touch input is not available.
+Wait for the interface to load completely.
+Avoid pressing multiple buttons at once to prevent glitches.
+</step>
+
+<step number="2">
+Confirm 'Start' when prompted.
+Review any warning messages shown before starting.
+Make sure no ongoing processes may interfere with the test.
+Press the confirmation button gently to avoid misselection.
+Verify that the prompt matches the expected test name.
+Stay near the device in case a user action is needed.
+</step>
+
+<step number="3">
+Review the results screen for errors.
+Read all displayed messages carefully for details.
+Scroll through the results page if multiple entries exist.
+Compare error codes with the troubleshooting section.
+Take a screenshot if logs need to be stored.
+Report any unusual patterns for further diagnosis.
+</step>
+
+<expectedResult>No errors reported; return code 0.</expectedResult>
+
+</task>
+</pageblock>
+
+</subject>
+</section>
+
+<section id="ch-02-sec-02" title="Maintenance">
+<subject id="ch-02-sec-02-subj-01" name="Routine Maintenance">
+<pageblock id="pb-0401" type="task">
+<heading>Cleaning Procedure</heading>
+<task id="task-040101" name="CleanFilter" level="basic">
+<description>Remove dust and debris from the airflow filter.</description>
+
+<step number="1">
+Power down and unplug the unit.
+Wait a few seconds to ensure internal power fully discharges.
+Check the power cord for heat before handling it.
+Place the unit on a stable surface during the process.
+Avoid touching internal components after shutdown.
+Keep the unplugged cable away from wet areas.
+</step>
+
+<step number="2">
+Remove filter per instructions.
+Follow the manual diagram to avoid damaging clips.
+Hold the filter bracket firmly while pulling it out.
+Inspect the filter for visible wear or cracks.
+Keep the removed filter away from dusty environments.
+Note any unusual smell or discoloration for future checks.
+</step>
+
+<step number="3">
+Wash filter with mild detergent, dry completely.
+Use lukewarm water for better cleaning efficiency.
+Avoid scrubbing too hard to prevent tearing the mesh.
+Shake off excess water before leaving it to dry.
+Place the filter in an open space with good airflow.
+Confirm the filter is fully dry to avoid moisture damage.
+</step>
+
+<step number="4">
+Reinstall filter and power on.
+Insert the filter gently back into its slot.
+Make sure it sits flush without bending.
+Secure any latches or clips properly.
+Plug the power cable back in after installation.
+Observe airflow to confirm proper reassembly.
+</step>
+
+<safetyWarnings>
+<warning>Ensure the unit is completely powered off before opening.</warning>
+</safetyWarnings>
+
+</task>
+</pageblock>
+</subject>
+</section>
+</chapter>
+
+</book>

@@ -84,7 +84,28 @@ After successful execution, you should see:
 PDF generated successfully.
 ```
 
-The generated PDF will be located at `out/output.pdf`, containing the formatted book list from `src/data.xml`.
+The generated PDF will be located at `out/output.pdf`, containing the formatted technical manual from `src/data.xml`.
+
+## XML Structure
+
+This project is configured for technical manual/documentation XML structure with the following hierarchy:
+
+- **book** (root) - Contains metadata and chapters
+  - **metadata** - Author, publisher, date, ISBN
+  - **chapter** - Main sections of the manual
+    - **intro** - Chapter introduction
+    - **section** - Subsections within chapters
+      - **subject** - Specific topics
+        - **pageblock** (type="text" or "task")
+          - **heading** - Pageblock title
+          - **para** - Paragraphs for text pageblocks
+          - **task** - Task instructions for task pageblocks
+            - **description** - Task overview
+            - **step** - Numbered procedure steps
+            - **expectedResult** - Expected outcome
+            - **safetyWarnings** - Safety notices
+            - **tools** - Required tools list
+            - **estimatedTime** - Time estimate
 
 ## How It Works
 
@@ -94,7 +115,12 @@ The generated PDF will be located at `out/output.pdf`, containing the formatted 
 4. **Transformer**: Uses JAXP TransformerFactory to load and apply the XSLT stylesheet
 5. **Transformation**: Applies the XSLT to the XML, generating XSL-FO which FOP immediately renders to PDF
 
-The XSLT stylesheet (`template.xsl`) transforms the XML data into XSL-FO (Formatting Objects), which FOP then renders as a PDF document.
+The XSLT stylesheet (`template.xsl`) transforms the XML data into XSL-FO (Formatting Objects), which FOP then renders as a PDF document with:
+- Professional title page with metadata
+- Hierarchical chapter/section structure
+- Formatted task procedures with numbered steps
+- Highlighted safety warnings and expected results
+- Color-coded sections for better readability
 
 ## Customization
 
