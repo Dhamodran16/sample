@@ -97,8 +97,7 @@
   <xsl:template match="subject">
     <fo:block font-size="14pt" font-weight="bold" 
               space-before="0.3in" space-after="0.15in" 
-              margin-left="0.4in" 
-              color="#333333">
+              margin-left="0.4in">
       <xsl:value-of select="@name"/>
     </fo:block>
     
@@ -112,8 +111,7 @@
       <!-- Heading -->
       <xsl:if test="heading">
         <fo:block font-size="13pt" font-weight="bold" 
-                  space-after="0.1in" 
-                  color="#0066CC">
+                  space-after="0.1in">
           <xsl:value-of select="heading"/>
         </fo:block>
       </xsl:if>
@@ -146,10 +144,7 @@
       <xsl:if test="@level">
         <fo:block font-size="9pt" space-after="0.1in" margin-left="0.2in">
           <fo:inline font-weight="bold">Level: </fo:inline>
-          <fo:inline background-color="#E6F3FF" 
-                     padding="2pt 6pt">
-            <xsl:value-of select="@level"/>
-          </fo:inline>
+          <xsl:value-of select="@level"/>
         </fo:block>
       </xsl:if>
       
@@ -163,9 +158,7 @@
         <fo:block font-size="10pt" 
                   space-before="0.15in" 
                   space-after="0.1in" 
-                  margin-left="0.2in" 
-                  padding="0.1in" 
-                  background-color="#F0F8E6">
+                  margin-left="0.2in">
           <fo:inline font-weight="bold">Expected Result: </fo:inline>
           <xsl:value-of select="expectedResult"/>
         </fo:block>
@@ -176,10 +169,8 @@
         <fo:block font-size="10pt" 
                   space-before="0.15in" 
                   space-after="0.1in" 
-                  margin-left="0.2in" 
-                  padding="0.1in" 
-                  background-color="#FFE6E6">
-          <fo:inline font-weight="bold" color="#CC0000">⚠ Safety Warning: </fo:inline>
+                  margin-left="0.2in">
+          <fo:inline font-weight="bold">⚠ Safety Warning: </fo:inline>
           <xsl:apply-templates select="safetyWarnings/warning"/>
         </fo:block>
       </xsl:if>
@@ -218,18 +209,15 @@
                   select="normalize-space(@changeMark)='1'
                           or translate(@changeType,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='modified'"/>
     <fo:block font-size="11pt" 
-              space-after="0.15in">
-      <xsl:attribute name="margin-left">
-        <xsl:choose>
-          <xsl:when test="$isChangeLine">0in</xsl:when>
-          <xsl:otherwise>0.2in</xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
-      <xsl:attribute name="padding-left">0.3in</xsl:attribute>
+              space-after="0.15in"
+              margin-left="0.2in"
+              padding-left="0.3in">
       <xsl:if test="$isChangeLine">
+        <xsl:attribute name="margin-left">-1.3in</xsl:attribute>
+        <xsl:attribute name="padding-left">1.8in</xsl:attribute>
         <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
       </xsl:if>
-      <fo:inline font-weight="bold" color="#0066CC">
+      <fo:inline font-weight="bold">
         Step <xsl:value-of select="@number"/>:
       </fo:inline>
       <fo:inline margin-left="0.1in">

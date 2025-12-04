@@ -34,7 +34,7 @@ Avoid using loose or extended cables to prevent power drops.
 Ensure the environment around the port is dry and clean.
 </step>
 
-<step number="2" changeMark="1" changeType="modified">
+<step number="2" changeMark="0" changeType="unchanged">
 Switch on main power.
 Verify that the outlet is supplying stable electricity.
 Confirm that the power button clicks smoothly without resistance.
@@ -85,7 +85,7 @@ Avoid marking on uneven or unstable surfaces.
 Use a pencil or marker that is clearly visible on the material.
 </step>
 
-<step number="2" changeMark="1" changeType="modified">
+<step number="2" changeMark="0" changeType="unchanged">
 Drill pilot holes.
 Choose a drill bit that matches the recommended size.
 Hold the drill steady to avoid widening the hole.
@@ -140,7 +140,7 @@ Wait for the interface to load completely.
 Avoid pressing multiple buttons at once to prevent glitches.
 </step>
 
-<step number="2" changeMark="1" changeType="modified">
+<step number="2" changeMark="0" changeType="unchanged">
 Confirm 'Start' when prompted.
 Review any warning messages shown before starting.
 Make sure no ongoing processes may interfere with the test.
@@ -182,7 +182,7 @@ Avoid touching internal components after shutdown.
 Keep the unplugged cable away from wet areas.
 </step>
 
-<step number="2" changeMark="1" changeType="modified">
+<step number="2" changeMark="0" changeType="unchanged">
 Remove filter per instructions.
 Follow the manual diagram to avoid damaging clips.
 Hold the filter bracket firmly while pulling it out.
@@ -200,7 +200,7 @@ Place the filter in an open space with good airflow.
 Confirm the filter is fully dry to avoid moisture damage.
 </step>
 
-<step number="4" changeMark="1" changeType="modified">
+<step number="4" changeMark="0" changeType="unchanged">
 Reinstall filter and power on.
 Insert the filter gently back into its slot.
 Make sure it sits flush without bending.
