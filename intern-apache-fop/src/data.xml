@@ -25,7 +25,7 @@
 <task id="task-010201" name="PowerOnCheck" level="basic">
 <description>Steps to safely power up the unit for first use.</description>
 
-<step number="1">
+<step number="1" changeMark="1" changeType="modified">
 Ensure power cable is connected.
 Make sure the cable is firmly seated on both ends.
 Check the plug for any visible damage before using it.
@@ -34,7 +34,7 @@ Avoid using loose or extended cables to prevent power drops.
 Ensure the environment around the port is dry and clean.
 </step>
 
-<step number="2">
+<step number="2" changeMark="1" changeType="modified">
 Switch on main power.
 Verify that the outlet is supplying stable electricity.
 Confirm that the power button clicks smoothly without resistance.
@@ -43,7 +43,7 @@ Listen for faint startup sounds indicating internal initialization.
 Avoid touching internal parts while power is switching on.
 </step>
 
-<step number="3">
+<step number="3" changeMark="1" changeType="modified">
 Wait for self-test to complete (blinking green).
 Watch the LED pattern to ensure it follows the normal cycle.
 Avoid interrupting the process by toggling the power switch.
@@ -76,7 +76,7 @@ Allow extra time if the unit is starting for the first time.
 <task id="task-020201" name="MountUnit" level="intermediate">
 <description>How to mount the unit safely and securely.</description>
 
-<step number="1">
+<step number="1" changeMark="1" changeType="modified">
 Mark hole positions on surface.
 Use a ruler or template to align hole points accurately.
 Ensure the marks form a straight and balanced layout.
@@ -85,7 +85,7 @@ Avoid marking on uneven or unstable surfaces.
 Use a pencil or marker that is clearly visible on the material.
 </step>
 
-<step number="2">
+<step number="2" changeMark="1" changeType="modified">
 Drill pilot holes.
 Choose a drill bit that matches the recommended size.
 Hold the drill steady to avoid widening the hole.
@@ -94,7 +94,7 @@ Clear dust from the holes after drilling.
 Ensure the holes are straight for proper screw alignment.
 </step>
 
-<step number="3">
+<step number="3" changeMark="1" changeType="modified">
 Install screws and tighten to 3 Nm.
 Use a torque driver to avoid over-tightening.
 Insert each screw gently before applying full torque.
@@ -131,8 +131,8 @@ Recheck torque settings to ensure uniform tightening.
 <task id="task-030201" name="RunSelfTest" level="basic">
 <description>Run the built-in self-test routine.</description>
 
-<step number="1">
-From the main menu, select Diagnostics &gt; Self-test.
+<step number="1" changeMark="1" changeType="modified">
+From the main menu, select Diagnostics > Self-test.
 Ensure the screen is responsive before navigating.
 Check that the menu icons are displayed correctly.
 Use the arrow keys if the touch input is not available.
@@ -140,7 +140,7 @@ Wait for the interface to load completely.
 Avoid pressing multiple buttons at once to prevent glitches.
 </step>
 
-<step number="2">
+<step number="2" changeMark="1" changeType="modified">
 Confirm 'Start' when prompted.
 Review any warning messages shown before starting.
 Make sure no ongoing processes may interfere with the test.
@@ -149,7 +149,7 @@ Verify that the prompt matches the expected test name.
 Stay near the device in case a user action is needed.
 </step>
 
-<step number="3">
+<step number="3" changeMark="1" changeType="modified">
 Review the results screen for errors.
 Read all displayed messages carefully for details.
 Scroll through the results page if multiple entries exist.
@@ -173,7 +173,7 @@ Report any unusual patterns for further diagnosis.
 <task id="task-040101" name="CleanFilter" level="basic">
 <description>Remove dust and debris from the airflow filter.</description>
 
-<step number="1">
+<step number="1" changeMark="1" changeType="modified">
 Power down and unplug the unit.
 Wait a few seconds to ensure internal power fully discharges.
 Check the power cord for heat before handling it.
@@ -182,7 +182,7 @@ Avoid touching internal components after shutdown.
 Keep the unplugged cable away from wet areas.
 </step>
 
-<step number="2">
+<step number="2" changeMark="1" changeType="modified">
 Remove filter per instructions.
 Follow the manual diagram to avoid damaging clips.
 Hold the filter bracket firmly while pulling it out.
@@ -191,7 +191,7 @@ Keep the removed filter away from dusty environments.
 Note any unusual smell or discoloration for future checks.
 </step>
 
-<step number="3">
+<step number="3" changeMark="1" changeType="modified">
 Wash filter with mild detergent, dry completely.
 Use lukewarm water for better cleaning efficiency.
 Avoid scrubbing too hard to prevent tearing the mesh.
@@ -200,7 +200,7 @@ Place the filter in an open space with good airflow.
 Confirm the filter is fully dry to avoid moisture damage.
 </step>
 
-<step number="4">
+<step number="4" changeMark="1" changeType="modified">
 Reinstall filter and power on.
 Insert the filter gently back into its slot.
 Make sure it sits flush without bending.

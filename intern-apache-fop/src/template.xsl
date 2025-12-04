@@ -214,11 +214,21 @@
   
   <!-- Step template -->
   <xsl:template match="step">
+    <xsl:variable name="isChangeLine"
+                  select="normalize-space(@changeMark)='1'
+                          or translate(@changeType,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='modified'"/>
     <fo:block font-size="11pt" 
-              space-after="0.15in" 
-              margin-left="0.2in" 
-              text-indent="-0.2in" 
-              padding-left="0.3in">
+              space-after="0.15in">
+      <xsl:attribute name="margin-left">
+        <xsl:choose>
+          <xsl:when test="$isChangeLine">0in</xsl:when>
+          <xsl:otherwise>0.2in</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:attribute name="padding-left">0.3in</xsl:attribute>
+      <xsl:if test="$isChangeLine">
+        <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
+      </xsl:if>
       <fo:inline font-weight="bold" color="#0066CC">
         Step <xsl:value-of select="@number"/>:
       </fo:inline>
