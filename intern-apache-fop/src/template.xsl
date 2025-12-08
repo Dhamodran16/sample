@@ -3,738 +3,506 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
 
-  <!-- Parameters mapping ${...} variables from .lay -->
-  <xsl:param name="logofile" select="'logo.png'"/>
-  <xsl:param name="securityHeader" select="'SECURITY HEADER'"/>
-  <xsl:param name="addInfoVar" select="'Additional Info'"/>
-  <xsl:param name="pmc" select="'PMC CODE'"/>
-  <xsl:param name="printTime" select="'Print Time'"/>
-  <xsl:param name="inworkInfo" select="'In Work'"/>
-
-  <xsl:param name="dmApplicVar" select="'Applicability text'"/>
-  <xsl:param name="dmcIssnoLabelVar" select="'DMC/ISSNO label'"/>
-  <xsl:param name="proprietaryTextVar" select="'Proprietary text'"/>
-  <xsl:param name="endLabelPostfix" select="'END LABEL'"/>
-  <xsl:param name="securityFooter" select="'SECURITY FOOTER'"/>
-  <xsl:param name="dmDmCodeStringVar" select="'DMC CODE'"/>
-  <xsl:param name="pnrtype" select="'ARABIC'"/>
-  <xsl:param name="dmIssueDateYear" select="'0000'"/>
-  <xsl:param name="dmIssueDateMonth" select="'00'"/>
-  <xsl:param name="dmIssueDateDay" select="'00'"/>
-  <xsl:param name="descTextVar" select="'Description'"/>
-  <xsl:param name="procedTextVar" select="'Procedure'"/>
-  <xsl:param name="dmDmc" select="''"/>
-  <xsl:param name="titlePageImage" select="'titlepage-image.png'"/>
-  <xsl:param name="manufacturerLogo" select="'manufacturer-logo.png'"/>
-  <xsl:param name="manufacturerAddress" select="'Manufacturer address goes here'"/>
-  <xsl:param name="renderTitlePage" select="'true'"/>
-  <xsl:param name="pageMaster" select="'simpleA4'"/>
-
-  <!-- Global variable: check if update highlight is enabled -->
-  <!-- Change marks appear only when reasonForUpdate has updateHighlight="1" -->
-  <xsl:variable name="isUpdateHighlighted"
-                select="boolean(//reasonForUpdate[@updateHighlight='1'])"/>
-  
-  <!-- Get the reasonForUpdate ID that has updateHighlight="1" for reference -->
-  <xsl:variable name="updateHighlightId" 
-                select="//reasonForUpdate[@updateHighlight='1']/@id"/>
-
-  <!-- Root template producing FO -->
-  <xsl:template match="/">
-    <fo:root>
-      <!-- Masters -->
-      <fo:layout-master-set>
-
-        <!-- A4 Simple -->
-        <fo:simple-page-master master-name="simpleA4"
-                               page-width="210mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="30mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="25mm" precedence="true"/>
-          <fo:region-after extent="25mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- A4 CREW Right -->
-        <fo:simple-page-master master-name="crewRightA4"
-                               page-width="210mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="30mm">
-          <fo:region-body margin-top="0mm" margin-bottom="0mm"/>
-          <fo:region-before extent="30mm"/>
-          <fo:region-after extent="30mm"/>
-        </fo:simple-page-master>
-
-        <!-- A4 CREW Left -->
-        <fo:simple-page-master master-name="crewLeftA4"
-                               page-width="210mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="30mm">
-          <fo:region-body margin-top="0mm" margin-bottom="0mm"/>
-          <fo:region-before extent="30mm"/>
-          <fo:region-after extent="30mm"/>
-        </fo:simple-page-master>
-
-        <!-- A4 IPD First -->
-        <fo:simple-page-master master-name="ipdFirstA4"
-                               page-width="210mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="30mm">
-          <fo:region-body margin-top="0mm" margin-bottom="0mm"/>
-          <fo:region-before extent="30mm"/>
-          <fo:region-after extent="30mm"/>
-        </fo:simple-page-master>
-
-        <!-- A4 Title page -->
-        <fo:simple-page-master master-name="titleA4"
-                               page-width="210mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="30mm">
-          <fo:region-body margin-top="0mm" margin-bottom="0mm"/>
-          <fo:region-before extent="30mm"/>
-          <fo:region-after extent="30mm"/>
-        </fo:simple-page-master>
-
-        <!-- A3 Foldout -->
-        <fo:simple-page-master master-name="foldoutA3"
-                               page-width="420mm" page-height="297mm"
-                               margin-left="25mm" margin-right="15mm"
-                               margin-top="33mm" margin-bottom="31mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="25mm" precedence="true"/>
-          <fo:region-after extent="25mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter Simple Right -->
-        <fo:simple-page-master master-name="simpleLetterRight"
-                               page-width="215.9mm" page-height="279.4mm"
-                               margin-left="30mm" margin-right="15mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter Simple Left -->
-        <fo:simple-page-master master-name="simpleLetterLeft"
-                               page-width="215.9mm" page-height="279.4mm"
-                               margin-left="16mm" margin-right="29.9mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter IPD First -->
-        <fo:simple-page-master master-name="ipdFirstLetterRight"
-                               page-width="215.9mm" page-height="279.4mm"
-                               margin-left="30mm" margin-right="15mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter IPD Simple Right -->
-        <fo:simple-page-master master-name="ipdSimpleLetterRight"
-                               page-width="215.9mm" page-height="279.4mm"
-                               margin-left="30mm" margin-right="15mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter IPD Simple Left -->
-        <fo:simple-page-master master-name="ipdSimpleLetterLeft"
-                               page-width="215.9mm" page-height="279.4mm"
-                               margin-left="16mm" margin-right="29.9mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-        <!-- Letter Foldout -->
-        <fo:simple-page-master master-name="foldoutLetter"
-                               page-width="431.8mm" page-height="279.4mm"
-                               margin-left="30mm" margin-right="15mm"
-                               margin-top="25mm" margin-bottom="22mm">
-          <fo:region-body margin-top="5mm" margin-bottom="8mm"/>
-          <fo:region-before extent="20mm" precedence="true"/>
-          <fo:region-after extent="20mm" precedence="true"/>
-        </fo:simple-page-master>
-
-      </fo:layout-master-set>
-
-      <!-- Bookmarks tree -->
-      <fo:bookmark-tree>
-        <xsl:if test="//description">
-          <fo:bookmark internal-destination="description">
-            <fo:bookmark-title><xsl:value-of select="$descTextVar"/></fo:bookmark-title>
-          </fo:bookmark>
-        </xsl:if>
-        <xsl:if test="//mainProcedure">
-          <fo:bookmark internal-destination="mainProc">
-            <fo:bookmark-title><xsl:value-of select="$procedTextVar"/></fo:bookmark-title>
-          </fo:bookmark>
-        </xsl:if>
-        <xsl:for-each select="//proceduralStep[title]">
-          <fo:bookmark>
-            <xsl:attribute name="internal-destination">
-              <xsl:text>step-</xsl:text>
-              <xsl:number level="multiple" count="proceduralStep" format="1.1.1.1"/>
-            </xsl:attribute>
-            <fo:bookmark-title>
-              <xsl:number level="multiple" count="proceduralStep" format="1.1.1.1"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="normalize-space(title)"/>
-            </fo:bookmark-title>
-          </fo:bookmark>
-        </xsl:for-each>
-      </fo:bookmark-tree>
-
-      <!-- Title Page - Disabled per user request -->
-      <xsl:if test="false()">
-        <fo:page-sequence master-reference="titleA4"
-                          font-family="Helvetica" font-size="10pt" line-height="12pt"
-                          hyphenate="false" language="en">
-          <fo:static-content flow-name="xsl-region-before">
-            <fo:block-container height="25mm" display-align="before">
-              <fo:block font-size="10pt" text-align="center" space-after="4mm">
-                <xsl:choose>
-                  <xsl:when test="//security/@securityClassification='01'">NATO Unclassified</xsl:when>
-                  <xsl:otherwise>NATO Unclassified</xsl:otherwise>
-                </xsl:choose>
-                <xsl:text> • </xsl:text>
-                <xsl:text>Applicable to: </xsl:text>
-                <xsl:value-of select="//applic/displayText/simplePara"/>
-              </fo:block>
-              <fo:block border-bottom="1pt solid #000" space-after="8mm"/>
-            </fo:block-container>
-          </fo:static-content>
-
-          <fo:static-content flow-name="xsl-region-after">
-            <fo:block-container height="25mm" display-align="after">
-              <fo:block font-size="9pt" line-height="11pt">
-                <fo:table table-layout="fixed" width="170mm">
-                  <fo:table-column column-width="85mm"/>
-                  <fo:table-column column-width="85mm"/>
-                  <fo:table-body>
-                    <fo:table-row>
-                      <fo:table-cell>
-                        <fo:block text-align="left" font-family="Helvetica" space-after="2pt">
-                          <xsl:text>Applicable to: </xsl:text>
-                          <xsl:value-of select="//applic/displayText/simplePara"/>
-                        </fo:block>
-                        <fo:block text-align="left" font-family="Helvetica" space-after="2pt">
-                          <xsl:choose>
-                            <xsl:when test="//security/@securityClassification='01'">NATO Unclassified</xsl:when>
-                            <xsl:otherwise>NATO Unclassified</xsl:otherwise>
-                          </xsl:choose>
-                        </fo:block>
-                        <fo:block text-align="left" font-family="Helvetica">
-                          <xsl:text>End of data module</xsl:text>
-                        </fo:block>
-                      </fo:table-cell>
-                      <fo:table-cell>
-                        <fo:block text-align="right" font-family="Helvetica" space-after="2pt">
-                          <xsl:value-of select="//dmCode/@modelIdentCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@systemDiffCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@systemCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@subSystemCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@subSubSystemCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@assyCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@disassyCode"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@disassyCodeVariant"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@infoCode"/>
-                          <xsl:value-of select="//dmCode/@infoCodeVariant"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="//dmCode/@itemLocationCode"/>
-                        </fo:block>
-                        <fo:block text-align="right" font-family="Helvetica">
-                          <xsl:value-of select="//issueDate/@year"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="format-number(number(//issueDate/@month), '00')"/>
-                          <xsl:text>-</xsl:text>
-                          <xsl:value-of select="format-number(number(//issueDate/@day), '00')"/>
-                          <xsl:text> Page </xsl:text>
-                          <fo:page-number/>
-                        </fo:block>
-                      </fo:table-cell>
-                    </fo:table-row>
-                  </fo:table-body>
-                </fo:table>
-              </fo:block>
-            </fo:block-container>
-          </fo:static-content>
-
-          <fo:flow flow-name="xsl-region-body">
-            <fo:block-container width="100%" margin-top="3mm" margin-bottom="3mm">
-              <!-- Main Title -->
-              <fo:block text-align="center" space-before="40mm" space-after="8mm">
-                <fo:block font-family="Helvetica" font-weight="bold" font-size="24pt" line-height="28pt">
-                  <xsl:value-of select="//dmTitle/techName"/>
-                </fo:block>
-                <fo:block font-family="Helvetica" font-style="italic" font-size="14pt" line-height="18pt" space-before="4mm">
-                  <xsl:value-of select="//dmTitle/infoName"/>
-                </fo:block>
-              </fo:block>
-
-              <!-- Table of Contents -->
-              <xsl:if test="//description/levelledPara[title]">
-                <fo:block space-before="15mm" space-after="8mm">
-                  <fo:block font-family="Helvetica" font-weight="bold" font-size="12pt" space-after="6mm">
-                    <xsl:text>Table of contents</xsl:text>
-                  </fo:block>
-                  
-                  <fo:table table-layout="fixed" width="170mm" font-size="10pt">
-                    <fo:table-column column-width="140mm"/>
-                    <fo:table-column column-width="30mm"/>
-                    <fo:table-body>
-                      <xsl:for-each select="//description/levelledPara[title]">
-                        <xsl:variable name="sectionNum" select="count(preceding-sibling::levelledPara[title]) + 1"/>
-                        <fo:table-row>
-                          <fo:table-cell>
-                            <fo:block text-align="left">
-                              <xsl:number level="single" count="levelledPara" from="description" format="1"/>
-                              <xsl:text> </xsl:text>
-                              <xsl:value-of select="title"/>
-                              <fo:leader leader-pattern="dots" leader-length.maximum="100%" leader-alignment="reference-area"/>
-                            </fo:block>
-                          </fo:table-cell>
-                          <fo:table-cell>
-                            <fo:block text-align="right">
-                              <fo:page-number-citation ref-id="section-{$sectionNum}"/>
-                            </fo:block>
-                          </fo:table-cell>
-                        </fo:table-row>
-                      </xsl:for-each>
-                    </fo:table-body>
-                  </fo:table>
-                </fo:block>
-              </xsl:if>
-
-              <!-- References Section -->
-              <fo:block space-before="15mm" space-after="8mm">
-                <fo:block font-family="Helvetica" font-weight="bold" font-size="12pt" text-align="center" space-after="4mm">
-                  <xsl:text>References</xsl:text>
-                </fo:block>
-                <fo:block font-family="Helvetica" font-weight="bold" font-size="11pt" text-align="center" space-after="4mm">
-                  <xsl:text>Table 1 References</xsl:text>
-                </fo:block>
-                <fo:table table-layout="fixed" width="170mm" font-size="10pt" border="1pt solid #000">
-                  <fo:table-column column-width="85mm"/>
-                  <fo:table-column column-width="85mm"/>
-                  <fo:table-header>
-                    <fo:table-row>
-                      <fo:table-cell border="1pt solid #000" padding="2mm">
-                        <fo:block font-weight="bold">Data module/Technical publication</fo:block>
-                      </fo:table-cell>
-                      <fo:table-cell border="1pt solid #000" padding="2mm">
-                        <fo:block font-weight="bold">Title</fo:block>
-                      </fo:table-cell>
-                    </fo:table-row>
-                  </fo:table-header>
-                  <fo:table-body>
-                    <fo:table-row>
-                      <fo:table-cell border="1pt solid #000" padding="2mm">
-                        <fo:block>None</fo:block>
-                      </fo:table-cell>
-                      <fo:table-cell border="1pt solid #000" padding="2mm">
-                        <fo:block></fo:block>
-                      </fo:table-cell>
-                    </fo:table-row>
-                  </fo:table-body>
-                </fo:table>
-              </fo:block>
-            </fo:block-container>
-          </fo:flow>
-        </fo:page-sequence>
-      </xsl:if>
-
-      <!-- Main Content -->
-      <fo:page-sequence master-reference="{$pageMaster}"
-                        font-family="Helvetica" font-size="10pt" line-height="12pt"
-                        hyphenate="true"
-                        language="en">
-        <fo:static-content flow-name="xsl-region-before">
-          <fo:block-container height="25mm" display-align="before">
-            <fo:block font-size="10pt" space-after="4mm" text-align="center" font-family="Helvetica">
-              <xsl:choose>
-                <xsl:when test="//security/@securityClassification='01'">NATO Unclassified</xsl:when>
-                <xsl:otherwise>NATO Unclassified</xsl:otherwise>
-              </xsl:choose>
-              <xsl:text> </xsl:text>
-              <xsl:text>Applicable to: </xsl:text>
-              <xsl:value-of select="//applic/displayText/simplePara"/>
-            </fo:block>
-            <fo:block border-bottom="1pt solid #000" space-after="2mm"/>
-          </fo:block-container>
-        </fo:static-content>
-
-        <fo:static-content flow-name="xsl-region-after">
-          <fo:block-container height="25mm" display-align="after">
-            <fo:block font-size="9pt" line-height="11pt">
-              <fo:table table-layout="fixed" width="170mm" border-top="1pt solid #000">
-                <fo:table-column column-width="60mm"/>
-                <fo:table-column column-width="50mm"/>
-                <fo:table-column column-width="60mm"/>
-                <fo:table-body>
-                  <fo:table-row>
-                    <fo:table-cell>
-                      <fo:block text-align="left" font-family="Helvetica" space-after="8pt">
-                        <xsl:text>Applicable to: </xsl:text>
-                        <xsl:value-of select="//applic/displayText/simplePara"/>
-                      </fo:block>
-                    </fo:table-cell>
-                    <fo:table-cell>
-                      <fo:block text-align="center" font-family="Helvetica" space-after="2pt">
-                        <xsl:choose>
-                          <xsl:when test="//security/@securityClassification='01'">NATO Unclassified</xsl:when>
-                          <xsl:otherwise>NATO Unclassified</xsl:otherwise>
-                        </xsl:choose>
-                      </fo:block>
-                      <fo:block text-align="center" font-family="Helvetica">
-                        <xsl:text>End of data module</xsl:text>
-                      </fo:block>
-                    </fo:table-cell>
-                    <fo:table-cell>
-                      <fo:block text-align="right" font-family="Helvetica" space-after="2pt">
-                        <xsl:value-of select="//dmCode/@modelIdentCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@systemDiffCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@systemCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@subSystemCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@subSubSystemCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@assyCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@disassyCode"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@disassyCodeVariant"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@infoCode"/>
-                        <xsl:value-of select="//dmCode/@infoCodeVariant"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="//dmCode/@itemLocationCode"/>
-                      </fo:block>
-                      <fo:block text-align="right" font-family="Helvetica">
-                        <xsl:value-of select="//issueDate/@year"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="format-number(number(//issueDate/@month), '00')"/>
-                        <xsl:text>-</xsl:text>
-                        <xsl:value-of select="format-number(number(//issueDate/@day), '00')"/>
-                        <xsl:text> Page </xsl:text>
-                        <fo:page-number/>
-                      </fo:block>
-                    </fo:table-cell>
-                  </fo:table-row>
-                </fo:table-body>
-              </fo:table>
-            </fo:block>
-          </fo:block-container>
-        </fo:static-content>
-
-        <fo:flow flow-name="xsl-region-body">
-          <fo:block-container width="100%" margin-top="4mm" margin-bottom="6mm">
-            <!-- description (STYLE description = cor_contentlevel) -->
-            <xsl:apply-templates select="//description | //mainProcedure"/>
-
-          <!-- Fallback: if no description/procedure nodes, render headings from params -->
-          <xsl:if test="not(//description)">
-            <fo:block id="description" space-before="12pt">
-              <fo:block font-family="Helvetica" font-weight="bold" font-size="10pt" keep-with-next.within-page="always">
-                <xsl:value-of select="$descTextVar"/>
-              </fo:block>
-            </fo:block>
-          </xsl:if>
-          <xsl:if test="not(//mainProcedure)">
-            <fo:block id="mainProc" space-before="28pt" space-after="28pt">
-              <fo:block font-family="Helvetica" font-weight="bold" font-size="10pt" keep-with-next.within-page="always">
-                <xsl:value-of select="$procedTextVar"/>
-              </fo:block>
-            </fo:block>
-          </xsl:if>
-
-          <!-- Render procedural steps if any -->
-          <xsl:apply-templates select="//proceduralStep"/>
-          </fo:block-container>
-        </fo:flow>
-      </fo:page-sequence>
-
-    </fo:root>
-  </xsl:template>
-
-  <!-- cor_idtarget: add id destinations using ${dmDmc}${->id} -->
-  <xsl:template match="*[@id]" mode="id-attr">
-    <xsl:attribute name="id">
-      <xsl:value-of select="concat($dmDmc, @id)"/>
-    </xsl:attribute>
-  </xsl:template>
-
-  <!-- description -->
-  <xsl:template match="description">
-    <!-- inherits from cor_contentlevel -->
-    <fo:block space-before="0pt" wrap-option="wrap" keep-together.within-page="auto">
-      <fo:block id="description" font-family="Helvetica" font-weight="bold" font-size="12pt" 
-                keep-with-next.within-page="always" space-after="16pt" wrap-option="wrap"
-                text-align="center">
-        <xsl:value-of select="$descTextVar"/>
-      </fo:block>
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
-
-  <!-- mainProcedure -->
-  <xsl:template match="mainProcedure">
-    <!-- inherits from cor_changeMarkHandling -->
-    <fo:block id="mainProc" space-before="28pt" space-after="28pt" wrap-option="wrap">
-      <fo:block font-family="Helvetica" font-weight="bold" font-size="10pt" keep-with-next.within-page="always" wrap-option="wrap">
-        <xsl:value-of select="$procedTextVar"/>
-      </fo:block>
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
-
-  <!-- nestedProceduralStepOrPara and title rendering with numbering -->
-  <xsl:template match="proceduralStep">
-    <!-- inherits from cor_blockProperties -->
-    <fo:block space-after="14pt" wrap-option="wrap">
-      <xsl:variable name="level" select="count(ancestor::proceduralStep) + 1"/>
-      <fo:block keep-with-next.within-page="always" wrap-option="wrap">
-        <xsl:attribute name="font-family">Helvetica</xsl:attribute>
+    <xsl:variable name="docTitle">
         <xsl:choose>
-          <xsl:when test="$level = 1">
-            <xsl:attribute name="font-size">14pt</xsl:attribute>
-            <xsl:attribute name="line-height">16pt</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="$level = 2">
-            <xsl:attribute name="font-size">12pt</xsl:attribute>
-            <xsl:attribute name="line-height">14pt</xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:if test="$level &gt; 4">
-              <xsl:attribute name="font-style">oblique</xsl:attribute>
-            </xsl:if>
-            <xsl:attribute name="font-size">10pt</xsl:attribute>
-            <xsl:attribute name="line-height">12pt</xsl:attribute>
-          </xsl:otherwise>
+            <xsl:when test="/book"><xsl:value-of select="/book/@title"/></xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="/dmodule/identAndStatusSection/dmAddress/dmAddressItems/dmTitle/techName"/>
+                <xsl:text> - </xsl:text>
+                <xsl:value-of select="/dmodule/identAndStatusSection/dmAddress/dmAddressItems/dmTitle/infoName"/>
+            </xsl:otherwise>
         </xsl:choose>
-        <xsl:attribute name="id">
-          <xsl:text>step-</xsl:text>
-          <xsl:number level="multiple" count="proceduralStep" format="1.1.1.1"/>
-        </xsl:attribute>
-        <xsl:number level="multiple" count="proceduralStep" format="1.1.1.1"/>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="normalize-space(title)"/>
-      </fo:block>
-      <xsl:apply-templates select="node()[not(self::title)]"/>
-    </fo:block>
-  </xsl:template>
+    </xsl:variable>
 
-  <!-- levelledPara: section with title and content -->
-  <xsl:template match="levelledPara">
-    <xsl:variable name="sectionNum" select="count(preceding-sibling::levelledPara[title]) + 1"/>
-    <fo:block space-before="14pt" space-after="14pt" wrap-option="wrap" 
-              keep-together.within-page="auto" keep-with-next.within-page="auto"
-              margin-top="0pt">
-      <xsl:if test="title">
-        <fo:block font-family="Helvetica" font-weight="bold" font-size="12pt" 
-                  keep-with-next.within-page="always" space-after="10pt" 
-                  space-before="0pt" wrap-option="wrap" text-indent="0pt"
-                  id="section-{$sectionNum}">
-          <xsl:if test="$isUpdateHighlighted">
-            <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-            <xsl:attribute name="padding-left">20mm</xsl:attribute>
-            <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-            <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-          </xsl:if>
-          <xsl:number level="single" count="levelledPara" from="description" format="1"/>
-          <xsl:text>  </xsl:text>
-          <xsl:apply-templates select="title"/>
-        </fo:block>
-      </xsl:if>
-      <xsl:apply-templates select="node()[not(self::title)]"/>
-    </fo:block>
-  </xsl:template>
+    <xsl:variable name="docCode">
+        <xsl:choose>
+            <xsl:when test="/book"><xsl:value-of select="/book/@id"/></xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat(
+                    /dmodule/identAndStatusSection/dmAddress/dmIdent/dmCode/@modelIdentCode, '-', 
+                    /dmodule/identAndStatusSection/dmAddress/dmIdent/dmCode/@systemCode, '-', 
+                    /dmodule/identAndStatusSection/dmAddress/dmIdent/dmCode/@infoCode
+                )"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
-  <!-- title within levelledPara -->
-  <xsl:template match="levelledPara/title">
-    <xsl:apply-templates/>
-  </xsl:template>
+    <xsl:variable name="docDate">
+        <xsl:choose>
+            <xsl:when test="/book/metadata/date"><xsl:value-of select="/book/metadata/date"/></xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat(
+                    /dmodule/identAndStatusSection/dmAddress/dmAddressItems/issueDate/@year, '-', 
+                    /dmodule/identAndStatusSection/dmAddress/dmAddressItems/issueDate/@month, '-', 
+                    /dmodule/identAndStatusSection/dmAddress/dmAddressItems/issueDate/@day
+                )"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
-  <!-- para: paragraph - handle text and lists separately -->
-  <xsl:template match="para">
-    <xsl:choose>
-      <!-- If para contains randomList, split text and list -->
-      <xsl:when test="randomList">
-        <!-- Text content before the list - extract text nodes only -->
-        <xsl:variable name="textBefore" select="text()[normalize-space()][following-sibling::randomList]"/>
-        <xsl:if test="$textBefore or *[not(self::randomList)]">
-          <fo:block space-after="10pt" text-align="justify" wrap-option="wrap" 
-                    linefeed-treatment="preserve" hyphenate="true" 
-                    line-height="12pt" space-before="0pt">
-            <xsl:if test="$isUpdateHighlighted">
-              <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-              <xsl:attribute name="padding-left">20mm</xsl:attribute>
-              <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-              <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-            </xsl:if>
-            <xsl:for-each select="node()[not(self::randomList)]">
-              <xsl:choose>
-                <xsl:when test="self::text()">
-                  <xsl:value-of select="normalize-space(.)"/>
-                  <xsl:if test="position() != last()">
-                    <xsl:text> </xsl:text>
-                  </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:apply-templates select="."/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </fo:block>
+    <xsl:variable name="securityLevel">
+        <xsl:choose>
+            <xsl:when test="/book/metadata/author">Author: <xsl:value-of select="/book/metadata/author"/></xsl:when>
+            <xsl:when test="//security/@securityClassification = '01'">UNCLASSIFIED</xsl:when>
+            <xsl:when test="//security/@securityClassification = '02'">RESTRICTED</xsl:when>
+            <xsl:otherwise>OFFICIAL</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+
+    <xsl:template name="start-change-mark">
+        <xsl:if test="(@updateHighlight and @updateHighlight!='0') or 
+                      (@changeMark and @changeMark!='0') or 
+                      contains(@changeType, 'modified') or
+                      contains(@issueType, 'change') or contains(@issueType, 'new')">
+            <fo:change-bar-begin change-bar-class="{generate-id()}" 
+                                 change-bar-style="solid" change-bar-width="1pt" 
+                                 change-bar-offset="5mm" color="#AAAAAA"/>
         </xsl:if>
-        <!-- List as separate block -->
-        <xsl:apply-templates select="randomList"/>
-      </xsl:when>
-      <!-- Normal para without lists -->
-      <xsl:otherwise>
-        <fo:block space-after="8pt" space-before="0pt" text-align="justify" wrap-option="wrap" 
-                  linefeed-treatment="preserve" hyphenate="true" line-height="12pt">
-          <xsl:if test="$isUpdateHighlighted">
-            <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-            <xsl:attribute name="padding-left">20mm</xsl:attribute>
-            <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-            <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-          </xsl:if>
-          <xsl:apply-templates/>
-        </fo:block>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+    </xsl:template>
 
-  <!-- simplePara: simple paragraph -->
-  <xsl:template match="simplePara">
-    <fo:block space-after="6pt" space-before="0pt" text-align="justify" wrap-option="wrap" 
-              linefeed-treatment="preserve" hyphenate="true" line-height="12pt">
-      <xsl:if test="$isUpdateHighlighted">
-        <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-        <xsl:attribute name="padding-left">20mm</xsl:attribute>
-        <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-        <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-      </xsl:if>
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
+    <xsl:template name="end-change-mark">
+        <xsl:if test="(@updateHighlight and @updateHighlight!='0') or 
+                      (@changeMark and @changeMark!='0') or 
+                      contains(@changeType, 'modified') or
+                      contains(@issueType, 'change') or contains(@issueType, 'new')">
+            <fo:change-bar-end change-bar-class="{generate-id()}"/>
+        </xsl:if>
+    </xsl:template>
 
-  <!-- randomList: unordered list -->
-  <xsl:template match="randomList">
-    <xsl:variable name="parentSection" select="ancestor::levelledPara[1]"/>
-    <xsl:variable name="sectionNum" select="count($parentSection/preceding-sibling::levelledPara[title]) + 1"/>
-    <xsl:choose>
-      <!-- For sections 4 and 5, use simple block container with aligned hyphens -->
-      <xsl:when test="$sectionNum = 4 or $sectionNum = 5">
-        <fo:block space-after="10pt" space-before="6pt" text-indent="0pt">
-          <xsl:apply-templates select="listItem"/>
-        </fo:block>
-      </xsl:when>
-      <!-- For other sections, use standard list-block with aligned bullets -->
-      <xsl:otherwise>
-        <fo:list-block space-after="10pt" space-before="6pt" 
-                       provisional-distance-between-starts="4mm" 
-                       provisional-label-separation="2mm">
-          <xsl:apply-templates select="listItem"/>
-        </fo:list-block>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
 
-  <!-- listItem: list item - use hyphen for sections 4 and 5, bullet for others -->
-  <xsl:template match="listItem">
-    <xsl:variable name="parentSection" select="ancestor::levelledPara[1]"/>
-    <xsl:variable name="sectionNum" select="count($parentSection/preceding-sibling::levelledPara[title]) + 1"/>
-    <xsl:choose>
-      <!-- For sections 4 and 5, use hyphen with consistent indentation -->
-      <xsl:when test="$sectionNum = 4 or $sectionNum = 5">
-        <fo:block>
-          <xsl:if test="$isUpdateHighlighted">
-            <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-            <xsl:attribute name="padding-left">20mm</xsl:attribute>
-            <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-            <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-          </xsl:if>
-          <fo:block wrap-option="wrap" linefeed-treatment="preserve" text-align="justify" 
-                    hyphenate="true" space-after="6pt" space-before="0pt"
-                    line-height="12pt" text-indent="0pt" margin-left="4mm">
-            <fo:inline>- </fo:inline>
+    <xsl:template match="/">
+        <fo:root font-family="Helvetica, Arial, sans-serif" font-size="10pt">
+            <fo:layout-master-set>
+                <fo:simple-page-master master-name="A4" page-width="210mm" page-height="297mm"
+                                       margin-top="15mm" margin-bottom="15mm" margin-left="25mm" margin-right="15mm">
+                    <fo:region-body margin-top="20mm" margin-bottom="20mm"/>
+                    <fo:region-before extent="15mm"/>
+                    <fo:region-after extent="15mm"/>
+                </fo:simple-page-master>
+            </fo:layout-master-set>
+
+            <fo:page-sequence master-reference="A4">
+                
+                <fo:static-content flow-name="xsl-region-before">
+                    <fo:block text-align="center" border-bottom="0.5pt solid #000" padding-bottom="2pt" font-weight="bold" font-size="9pt">
+                        <xsl:value-of select="$securityLevel"/>
+                    </fo:block>
+                </fo:static-content>
+
+                <fo:static-content flow-name="xsl-region-after">
+                    <fo:block border-top="0.5pt solid #000" padding-top="2pt" font-size="9pt">
+                        <fo:table table-layout="fixed" width="100%">
+                            <fo:table-column column-width="40%"/>
+                            <fo:table-column column-width="20%"/>
+                            <fo:table-column column-width="40%"/>
+                            <fo:table-body>
+                                <fo:table-row>
+                                    <fo:table-cell><fo:block><xsl:value-of select="$docCode"/></fo:block></fo:table-cell>
+                                    <fo:table-cell><fo:block text-align="center">Page <fo:page-number/></fo:block></fo:table-cell>
+                                    <fo:table-cell>
+                                        <fo:block text-align="right">
+                                            <xsl:value-of select="$docDate"/>
+                                        </fo:block>
+                                    </fo:table-cell>
+                                </fo:table-row>
+                            </fo:table-body>
+                        </fo:table>
+                    </fo:block>
+                </fo:static-content>
+
+                <fo:flow flow-name="xsl-region-body">
+                    <fo:block font-size="24pt" font-weight="bold" space-after="20mm" text-align="center" color="#333">
+                        <xsl:value-of select="$docTitle"/>
+                    </fo:block>
+
+                    <xsl:choose>
+                        <xsl:when test="/book">
+                            <xsl:apply-templates select="/book/chapter"/>
+                        </xsl:when>
+                        
+                        <xsl:when test="//illustratedPartsCatalog">
+                            <xsl:apply-templates select="//illustratedPartsCatalog"/>
+                        </xsl:when>
+                        
+                        <xsl:when test="//procedure">
+                            <xsl:apply-templates select="//procedure"/>
+                        </xsl:when>
+                        
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="//content"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    
+                    <fo:block space-before="20mm" text-align="center" font-style="italic" color="#AAA" font-size="9pt">
+                        *** End of Document ***
+                    </fo:block>
+                </fo:flow>
+            </fo:page-sequence>
+        </fo:root>
+    </xsl:template>
+
+
+    <xsl:template match="internalRef">
+        <fo:basic-link internal-destination="{@internalRefId}" color="blue" text-decoration="underline">
+            <xsl:text>[Ref: </xsl:text>
+            <xsl:value-of select="@internalRefId"/>
+            <xsl:text>]</xsl:text>
+        </fo:basic-link>
+    </xsl:template>
+
+    <xsl:template match="refs">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-weight="bold" space-after="6pt" border-bottom="1pt solid #DDD">References:</fo:block>
+        <fo:list-block space-after="12pt">
             <xsl:apply-templates/>
-          </fo:block>
-        </fo:block>
-      </xsl:when>
-      <!-- For other sections, use standard list with bullet -->
-      <xsl:otherwise>
+        </fo:list-block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="refs/dmRef">
+        <xsl:call-template name="start-change-mark"/>
         <fo:list-item>
-          <fo:list-item-label end-indent="label-end()">
-            <fo:block>•</fo:block>
-          </fo:list-item-label>
-          <fo:list-item-body start-indent="body-start()">
-            <fo:block wrap-option="wrap" linefeed-treatment="preserve" text-align="justify" 
-                      hyphenate="true" space-after="6pt" space-before="0pt"
-                      line-height="12pt" text-indent="0pt" margin-left="0pt">
-              <xsl:if test="$isUpdateHighlighted">
-                <xsl:attribute name="margin-left">-20mm</xsl:attribute>
-                <xsl:attribute name="padding-left">20mm</xsl:attribute>
-                <xsl:attribute name="border-left">2pt solid #000000</xsl:attribute>
-                <!-- <xsl:attribute name="background-color">#FFFF99</xsl:attribute> -->
-              </xsl:if>
-              <xsl:apply-templates/>
-            </fo:block>
-          </fo:list-item-body>
+            <fo:list-item-label end-indent="label-end()"><fo:block>•</fo:block></fo:list-item-label>
+            <fo:list-item-body start-indent="body-start()">
+                <fo:block font-family="monospace" font-size="9pt">
+                    <xsl:value-of select="concat(dmRefIdent/dmCode/@modelIdentCode, '-', dmRefIdent/dmCode/@systemCode, '-', dmRefIdent/dmCode/@infoCode)"/>
+                </fo:block>
+            </fo:list-item-body>
         </fo:list-item>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
 
-  <!-- emphasis: bold text -->
-  <xsl:template match="emphasis">
-    <fo:inline font-weight="bold">
-      <xsl:apply-templates/>
-    </fo:inline>
-  </xsl:template>
+    <xsl:template match="figure">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block id="{@id}" font-weight="bold" space-after="10pt" text-align="center" border="1pt solid #DDD" padding="10pt" keep-together.within-page="always">
+            [FIGURE: <xsl:value-of select="title"/>]
+            <xsl:apply-templates select="graphic"/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
 
-  <!-- para within listItem - output text inline without creating additional blocks -->
-  <xsl:template match="listItem/para">
-    <xsl:apply-templates/>
-  </xsl:template>
+    <xsl:template match="graphic">
+        <fo:block font-size="8pt" font-weight="normal" color="#666" space-before="5pt">
+            [Image Source: <xsl:value-of select="@infoEntityIdent"/>]
+        </fo:block>
+        <xsl:if test="hotspot">
+            <fo:block font-size="8pt" text-align="left" margin-top="5pt" border-top="1pt dashed #EEE" padding-top="2pt">
+                <fo:inline font-weight="bold">Hotspots:</fo:inline>
+                <xsl:apply-templates select="hotspot"/>
+            </fo:block>
+        </xsl:if>
+    </xsl:template>
 
-  <!-- copyrightPara -->
-  <xsl:template match="copyrightPara">
-    <fo:block space-after="6pt" text-align="justify" wrap-option="wrap" linefeed-treatment="preserve" hyphenate="true">
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
+    <xsl:template match="hotspot">
+        <fo:block id="{@id}" margin-left="5pt">
+            • <xsl:value-of select="@hotspotTitle"/> (ID: <xsl:value-of select="@applicationStructureIdent"/>)
+        </fo:block>
+    </xsl:template>
 
-  <!-- Generic text nodes - preserve whitespace but allow wrapping -->
-  <xsl:template match="text()">
-    <xsl:value-of select="."/>
-  </xsl:template>
+    <xsl:template match="definitionList">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-after="12pt">
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
 
-  <!-- Default: ignore unknown elements but process children -->
-  <xsl:template match="*">
-    <xsl:apply-templates/>
-  </xsl:template>
+    <xsl:template match="definitionListItem">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-after="8pt" keep-together.within-page="always">
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="listItemTerm">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-weight="bold" color="#333" space-after="2pt">
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="listItemDefinition">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block start-indent="8mm" border-left="2pt solid #EEE" padding-left="4mm">
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="para/dmRef | listItemDefinition/dmRef">
+        <fo:inline font-family="monospace" font-size="9pt" color="#000088">
+            [Ref: <xsl:value-of select=".//dmCode/@infoCode"/>]
+        </fo:inline>
+    </xsl:template>
+
+    <xsl:template match="chapter">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block break-before="page" space-after="10pt">
+            <fo:block font-size="18pt" font-weight="bold" border-bottom="2pt solid black" space-after="10pt" padding-bottom="4pt">
+                <xsl:value-of select="@title"/>
+            </fo:block>
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="section">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-before="15pt" space-after="10pt">
+            <fo:block font-size="14pt" font-weight="bold" color="#444">
+                <xsl:value-of select="@title"/>
+            </fo:block>
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+    
+    <xsl:template match="subject">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-size="12pt" font-weight="bold" space-before="10pt" space-after="6pt" color="#555" border-bottom="1pt solid #EEE">
+            <xsl:value-of select="@name"/>
+        </fo:block>
+        <xsl:apply-templates/>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="pageblock">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-after="10pt"><xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="heading">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-size="11pt" font-weight="bold" space-after="4pt" color="#666"><xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="task">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block border="1pt solid #EEE" padding="10pt" space-after="10pt">
+            <fo:block font-weight="bold" space-after="5pt">Task: <xsl:value-of select="@name"/></fo:block>
+            <xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="step">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:list-block provisional-distance-between-starts="10mm" space-after="6pt">
+            <fo:list-item>
+                <fo:list-item-label end-indent="label-end()"><fo:block font-weight="bold"><xsl:value-of select="@number"/>.</fo:block></fo:list-item-label>
+                <fo:list-item-body start-indent="body-start()"><fo:block><xsl:apply-templates/></fo:block></fo:list-item-body>
+            </fo:list-item>
+        </fo:list-block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+    
+    <xsl:template match="tools">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-weight="bold" space-before="8pt" space-after="2pt" color="#333">Tools Required:</fo:block>
+        <fo:list-block provisional-distance-between-starts="5mm"><xsl:apply-templates/></fo:list-block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="safetyWarnings">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-weight="bold" space-before="10pt" space-after="4pt" color="red">⚠ SAFETY WARNINGS:</fo:block>
+        <xsl:apply-templates/>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="warning">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block border="1pt solid red" padding="4pt" margin="4pt" background-color="#FFEEEE" font-weight="bold" color="red">WARNING: <xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="caution">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block border="1pt solid orange" padding="4pt" margin="4pt" background-color="#FFFFEE" font-weight="bold" color="#CC8800">CAUTION: <xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="note">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block border="1pt solid #999" padding="4pt" margin="4pt" background-color="#EEEEEE" font-style="italic">NOTE: <xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="estimatedTime">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-style="italic" space-before="6pt" color="#666" border-top="1pt dashed #CCC" padding-top="4pt">
+            <fo:inline font-weight="bold">Estimated Time: </fo:inline>
+            <xsl:apply-templates/><xsl:text> </xsl:text><xsl:value-of select="@unit"/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+    
+    <xsl:template match="expectedResult">
+         <xsl:call-template name="start-change-mark"/>
+         <fo:block font-style="italic" color="green" space-after="4pt">Result: <xsl:apply-templates/></fo:block>
+         <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="metadata">
+         <fo:block font-size="9pt" color="#888" space-after="20pt" text-align="center">
+            <xsl:if test="publisher">Publisher: <xsl:value-of select="publisher"/> | </xsl:if>
+            <xsl:if test="isbn">ISBN: <xsl:value-of select="isbn"/></xsl:if>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="illustratedPartsCatalog">
+        <xsl:apply-templates select="figure"/>
+        <xsl:apply-templates select="partsList"/>
+    </xsl:template>
+
+    <xsl:template match="partsList">
+        <fo:table width="100%" table-layout="fixed" border-collapse="collapse">
+            <fo:table-column column-width="10%"/>
+            <fo:table-column column-width="20%"/>
+            <fo:table-column column-width="50%"/>
+            <fo:table-column column-width="10%"/>
+            <fo:table-column column-width="10%"/>
+            <fo:table-header>
+                <fo:table-row background-color="#EEE" font-weight="bold">
+                    <fo:table-cell border="1pt solid black" padding="2pt"><fo:block>Lvl</fo:block></fo:table-cell>
+                    <fo:table-cell border="1pt solid black" padding="2pt"><fo:block>Part No</fo:block></fo:table-cell>
+                    <fo:table-cell border="1pt solid black" padding="2pt"><fo:block>Description</fo:block></fo:table-cell>
+                    <fo:table-cell border="1pt solid black" padding="2pt"><fo:block>Qty</fo:block></fo:table-cell>
+                    <fo:table-cell border="1pt solid black" padding="2pt"><fo:block>CAGE</fo:block></fo:table-cell>
+                </fo:table-row>
+            </fo:table-header>
+            <fo:table-body><xsl:apply-templates select="partTreeNode"/></fo:table-body>
+        </fo:table>
+    </xsl:template>
+
+    <xsl:template match="partTreeNode">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:table-row>
+            <fo:table-cell border="0.5pt solid black" padding="2pt"><fo:block text-align="center"><xsl:value-of select="@indenture"/></fo:block></fo:table-cell>
+            <fo:table-cell border="0.5pt solid black" padding="2pt"><fo:block font-family="monospace"><xsl:value-of select="itemIdentData/partNumber"/></fo:block></fo:table-cell>
+            <fo:table-cell border="0.5pt solid black" padding="2pt">
+                <fo:block><xsl:attribute name="start-indent"><xsl:value-of select="concat((@indenture - 1) * 4, 'mm')"/></xsl:attribute><xsl:value-of select="itemIdentData/descrForPart"/></fo:block>
+            </fo:table-cell>
+            <fo:table-cell border="0.5pt solid black" padding="2pt"><fo:block text-align="center"><xsl:value-of select="itemIdentData/quantityPerNextHigherAssy"/></fo:block></fo:table-cell>
+            <fo:table-cell border="0.5pt solid black" padding="2pt"><fo:block text-align="center"><xsl:value-of select="itemIdentData/nscm"/></fo:block></fo:table-cell>
+        </fo:table-row>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="procedure">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="preliminaryRqmts">
+        <fo:block font-weight="bold" space-after="6pt" border-bottom="1pt solid black">Requirements:</fo:block>
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="supportEquipDescr | supplyDescr | spareDescr | tool">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block start-indent="5mm" space-after="2pt">• <xsl:value-of select="."/><xsl:value-of select="name"/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="proceduralStep">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-before="6pt" space-after="6pt">
+            <xsl:if test="title"><fo:block font-weight="bold" space-after="2pt"><xsl:value-of select="title"/></fo:block></xsl:if>
+            <fo:block margin-left="4mm"><xsl:apply-templates select="*[not(self::title)]"/></fo:block>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="description">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="para | simplePara | p | intro/para">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-after="8pt" text-align="justify" line-height="1.4"><xsl:apply-templates/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="levelledPara">
+        <fo:block space-after="12pt"><xsl:apply-templates/></fo:block>
+    </xsl:template>
+
+    <xsl:template match="levelledPara/title">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block font-weight="bold" keep-with-next="always" space-after="6pt" space-before="12pt" font-size="12pt">
+            <xsl:number level="multiple" format="1.1 " count="levelledPara"/><xsl:text>  </xsl:text><xsl:apply-templates/>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="randomList | list | ul | ol">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:list-block provisional-distance-between-starts="6mm" space-after="8pt" margin-left="5mm"><xsl:apply-templates select="listItem | li"/></fo:list-block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="listItem | li">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:list-item space-after="4pt">
+            <fo:list-item-label end-indent="label-end()"><fo:block>•</fo:block></fo:list-item-label>
+            <fo:list-item-body start-indent="body-start()"><fo:block><xsl:apply-templates/></fo:block></fo:list-item-body>
+        </fo:list-item>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="table">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block space-before="10pt" space-after="10pt">
+            <fo:table width="100%" table-layout="fixed" border-collapse="separate" border="0.5pt solid black">
+                <xsl:apply-templates select=".//tgroup"/>
+            </fo:table>
+        </fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="tgroup">
+        <fo:table-body>
+            <xsl:apply-templates select=".//row | .//tr"/>
+        </fo:table-body>
+    </xsl:template>
+
+    <xsl:template match="row | tr">
+        <fo:table-row>
+            <xsl:apply-templates select="entry | td"/>
+        </fo:table-row>
+    </xsl:template>
+
+    <xsl:template match="entry | td">
+        <fo:table-cell border="0.5pt solid black" padding="4pt">
+            <fo:block>
+                <xsl:apply-templates/>
+            </fo:block>
+        </fo:table-cell>
+    </xsl:template>
+    
+    <xsl:template match="reqCond">
+        <xsl:call-template name="start-change-mark"/>
+        <fo:block margin-left="5mm" space-after="2pt">• <xsl:value-of select="noCond"/></fo:block>
+        <xsl:call-template name="end-change-mark"/>
+    </xsl:template>
+
+    <xsl:template match="emphasis | bold | b">
+        <fo:inline font-weight="bold"><xsl:apply-templates/></fo:inline>
+    </xsl:template>
+    <xsl:template match="italic | i">
+        <fo:inline font-style="italic"><xsl:apply-templates/></fo:inline>
+    </xsl:template>
+    <xsl:template match="underline | u">
+        <fo:inline text-decoration="underline"><xsl:apply-templates/></fo:inline>
+    </xsl:template>
+
+    <xsl:template match="*">
+        <xsl:apply-templates/>
+    </xsl:template>
 
 </xsl:stylesheet>
