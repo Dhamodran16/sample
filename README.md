@@ -847,7 +847,7 @@ produce ready-to-drop-in Python code for: (a) number normalization, (b) candidat
 
 
 
-
+----------------------------------------------------------------------------------------------------
 prompts:
 {You are an AI voice assistant for a restaurant serving customers in Singapore and Malaysia. Your task is to extract ordered menu items and quantities from noisy speech transcripts and match them ONLY to the provided menu list.
 
